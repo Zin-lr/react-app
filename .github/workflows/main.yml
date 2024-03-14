@@ -19,19 +19,18 @@ jobs:
         env:
           OUTPUT_VAR: value    
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       - run: npm install
       - run: npm run build 
       - run: npm test
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
       - name: Deploy to AWS S3
-        run: aws s3 sync $SOURCE_DIR s3://bucket-usingcf
-        env:
-          SOURCE_DIR: 'build'      
+        run: aws s3 sync ./build/. s3://bucket-usingcf
+              
